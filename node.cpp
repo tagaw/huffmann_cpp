@@ -18,6 +18,16 @@ TreeNode::TreeNode(const TreeNode& n) {
 
 TreeNode::~TreeNode() {}
 
+// Access
+std::string TreeNode::to_string() {
+    std::string str = "{ ";
+    str += this->symbol;
+    str += " : ";
+    str += std::to_string(this->freq);
+    str += " }";
+    return str;
+}
+
 // Overloads
 
 bool TreeNode::operator==(const TreeNode& n) {
@@ -36,17 +46,13 @@ TreeNode& TreeNode::operator=(const TreeNode& n) {
     if (&n != this) {
         this->symbol = n.symbol;
         this->freq = n.freq;
-        this->left = nullptr;
-        this->right = nullptr;
+        this->left = n.left;
+        this->right = n.right;
     }
     return *this;
 }
 
 std::ostream& operator<<(std::ostream& stream, TreeNode& n) { 
-    return stream << "{ " << n.symbol << " : " << n.freq << " }" << std::endl;
-}
-
-std::ostream& operator<<(std::ostream& stream, TreeNode* n) { 
-    return stream << "{ " << n->symbol << " : " << n->freq << " }" << std::endl;
+    return stream << n.to_string();
 }
 

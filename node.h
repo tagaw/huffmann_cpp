@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <string>
 #include <iostream>
 
 class TreeNode {
@@ -24,6 +25,9 @@ public:
 
     ~TreeNode();
 
+    // Access
+    std::string to_string();
+
     // Overloads
 
     bool operator==(const TreeNode& n);
@@ -35,6 +39,4 @@ public:
     TreeNode& operator=(const TreeNode& n);
 
     friend std::ostream& operator<<(std::ostream& stream, TreeNode& n );
-
-    friend std::ostream& operator<<(std::ostream& stream, TreeNode* n );
 };
