@@ -7,13 +7,23 @@
 
 class HuffmanAlgorithm {
 private:
-    Code* table[ASCII];
+    Code table[ASCII];
     TreeNode* root;
     PriorityQueue pq;
 
+    std::ifstream* infile;
+
+    void read_tree();
+
+    void make_tree(int histogram[ASCII]);
+
+    void generate_histogram();
+
+    void generate_codes();
+
 public:
     // Constructors
-    HuffmanAlgorithm(std::ifstream infile);
+    HuffmanAlgorithm(std::ifstream ifs);
 
     ~HuffmanAlgorithm();
 
