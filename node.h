@@ -21,6 +21,13 @@ public:
     */
     TreeNode(uint8_t symbol, int freq);
 
+    /*
+    @brief Creates a parent of 2 children with a frequency equal to both children.
+    @param l | left child
+    @param r | right childn
+    */
+    TreeNode(TreeNode* l, TreeNode* r);
+
     TreeNode(const TreeNode& n);
 
     ~TreeNode();

@@ -9,6 +9,13 @@ TreeNode::TreeNode(uint8_t symbol, int freq) {
     this->right = nullptr;
 }
 
+TreeNode::TreeNode(TreeNode* l, TreeNode* r) {
+    this->symbol = '$';
+    this->freq = l->freq + r->freq;
+    this->left = l;
+    this->right = r;
+}
+
 TreeNode::TreeNode(const TreeNode& n) {
     this->symbol = n.symbol;
     this->freq = n.freq;
