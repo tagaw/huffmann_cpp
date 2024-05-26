@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cstdint>
 #include <fstream>
 #include <iostream>
 #include "constants.h"
@@ -16,10 +15,8 @@ private:
 
     void clear_bit(int i);
 
-    uint8_t get_bit(int i);
-
 public:
-    Code(void);
+    Code(void); 
 
     // access
     int size();
@@ -28,7 +25,12 @@ public:
 
     bool full();
 
+    uint8_t get_bit(int i);
+
     void push_bit(uint8_t bit);
 
     uint8_t pop_bit();
+
+    Code& operator=(const Code& c);
+
 };

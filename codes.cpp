@@ -46,11 +46,21 @@ void Code::push_bit(uint8_t bit) {
     else {
         clear_bit(top);
     }
-    top -= 1;
+    top += 1;
     return;
 }
 
 uint8_t Code::pop_bit(void) {
     top -= 1;
     return get_bit(top);
+}
+
+Code& Code::operator=(const Code& c) {
+    if (this != &c) {
+        top = c.top;
+        for (int i = 0; i < (top+8)/8; i++) {
+            bits[i] = c.bits[i];
+        }
+    }
+    return *this;
 }
