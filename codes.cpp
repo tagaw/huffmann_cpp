@@ -58,7 +58,7 @@ uint8_t Code::pop_bit(void) {
 Code& Code::operator=(const Code& c) {
     if (this != &c) {
         top = c.top;
-        for (int i = 0; i < (top+8)/8; i++) {
+        for (int i = 0; i < (top+7)/8; i++) {
             bits[i] = c.bits[i];
         }
     }
