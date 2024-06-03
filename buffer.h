@@ -24,7 +24,7 @@ private:
 
 protected:
     // @brief gets characters in buffer for reading
-    virtual std::streambuf::int_type underflow();
+    //virtual std::streambuf::int_type underflow();
 
     // @brief gets characters in buffer for writing
     virtual std::streambuf::int_type overflow(int c = EOF);
@@ -37,6 +37,11 @@ public:
     HuffmanBuffer(std::streambuf* buffer, HuffmanAlgorithm* hfa);
 
     // @brief Clears all allocated data
-    ~HuffmanBuffer();
+    virtual ~HuffmanBuffer();
+
+    //@brief set HuffmanAlgorithm to new data
+    void set_huffman(HuffmanAlgorithm* new_ha);
+
+    void set_encode();
 
 };
