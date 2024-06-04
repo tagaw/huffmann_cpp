@@ -2,11 +2,13 @@
 
 #include "huffman.h"
 
-// @brief A buffer that handles I/O of huffman data
+// @brief A buffer that handles I/O of huffman data. Decodes read input and Encodes written output
 class HuffmanBuffer : public std::streambuf {
 private:
+    // underlying buffer
     std::streambuf* buffer;
 
+    // buffers
     uint8_t* in_buffer;
     uint8_t* out_buffer;
     uint8_t* code_bits;
@@ -19,29 +21,31 @@ private:
     // @brief performs huffman compression of n bytes
     void compress(int bytes_in);
 
-    // @brief flushes codes to location
+    // @brief finishes and flushes codes in code buffer
     void finish_code();
 
 protected:
-    // @brief gets characters in buffer for reading
+    // @brief decodes characters for reading
     //virtual std::streambuf::int_type underflow();
 
-    // @brief gets characters in buffer for writing
+    // @brief encodes characters for writing
     virtual std::streambuf::int_type overflow(int c = EOF);
 
-    // @brief syncs location in file with buffer
+    // @brief syncs buffer with file, flushes data and codes
     virtual std::streambuf::int_type sync();
 
 public:
     // @brief Wraps an existing buffer and assigns associated huffman algorithm
-    HuffmanBuffer(std::streambuf* buffer, HuffmanAlgorithm* hfa);
+    HuffmanBuffer(std::streambuf* buffer);
 
     // @brief Clears all allocated data
     virtual ~HuffmanBuffer();
 
-    //@brief set HuffmanAlgorithm to new data
-    void set_huffman(HuffmanAlgorithm* new_ha);
+    //@brief Sets internal huffman object for encoding
+    //@param istream* Input data for encoding
+    void set_huffman(std::istream* input, std::ostream* dst);
 
-    void set_encode();
-
+    //@brief Sets internal huffman object for decoding
+    //@param ostream* Input data for decoding
+    void set_huffman(std::ostream* input, std::istream* dst);
 };
