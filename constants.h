@@ -1,4 +1,5 @@
 #pragma once
+
 #include <cstdint>
 #include <iostream>
 
@@ -9,9 +10,7 @@
 
 typedef struct {
     uint32_t magic;
-    uint16_t tree_size;
-    uint64_t file_size;
-    void print_h(void) {
-        std::cerr << magic << "\n" << tree_size << "\n" << file_size << std::endl;
-    } 
+    uint32_t tree_size;
+    uint32_t file_size;
 } Header;
+
