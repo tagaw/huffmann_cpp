@@ -5,25 +5,20 @@
 
 class EncodeStream : public std::ostream {
 private:
-    HuffmanAlgorithm* huffman;
+    // base stream for unformatted i/o
     std::ostream* base_stream;
 
-    uint8_t input[BLOCK];
-    uint8_t output[BLOCK];
-
-    int bit_idx;
-    int max_code_bit = BLOCK * 8;
-
-    void flush_code(std::ostream& out);
-
-    void compress(int nbytes, std::ostream& out);
+    // pointer to current buffer
+    HuffmanBuffer* curr_buffer;
 
 public:
+    //@brief constructor, uses existing ostream
     EncodeStream(std::ostream* infile);  
 
+    //@brief deconstructor
     ~EncodeStream();
 
-    // overload 
+    //@brief Insertion into stream encodes data
     friend std::ostream& operator<<(EncodeStream& ofile, std::istream& ifile);
 
 };
