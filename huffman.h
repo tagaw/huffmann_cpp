@@ -5,12 +5,13 @@
 #include "node.h"
 #include "queue.h"
 
+// @brief object to handle the huffman algorithm for encoding and decoding
 class HuffmanAlgorithm {
 private:
     Code table[ASCII];
     TreeNode* root;
-
     Header header;
+
 
     // @brief input for huffman encoding (compression)
     std::istream* infile; 
@@ -42,15 +43,19 @@ private:
     void generate_codes(TreeNode* root, Code c);
 
     //@brief Writes a tree to a set file
-    void write_tree(TreeNode* root, std::ostream& outfile);
+    void write_tree(TreeNode* root, std::ostream* outfile);
 
 public:
-    // Constructor -
-    // @param input File to encode/decode
-
+    //@brief default constructor       
     HuffmanAlgorithm();
 
-    // Deconstructor -
+    //@brief constructor to initalize encoding
+    HuffmanAlgorithm(std::istream* input);
+
+    //@brief constructor to initalize decoding
+    HuffmanAlgorithm(std::ostream* input);
+
+    // Deconstructor
     // @brief Deletes a tree if initialized
     ~HuffmanAlgorithm();
 
@@ -61,9 +66,12 @@ public:
     void set_encode(std::istream* input);
 
     //@brief Initialize the object for decoding
-    void set_decode(std::ostream& input);
+    void set_decode(std::ostream* input);
 
     //@brief Writes a header to a specified file
-    void write_header(std::ostream& outfile);
+    void write_header(std::ostream* outfile);
+
+    //@brief debug func cause codes were uninitalized from a bug
+    void print_code();
     
 };

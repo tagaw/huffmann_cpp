@@ -1,11 +1,14 @@
 #include "huffman.h"
 #include <queue>
 
+//@brief compares nodes for priority queue
 struct customCmpLs {
     bool operator() (const TreeNode* n1, const TreeNode* n2) const { 
         return n1->freq > n2->freq; 
     }
 };
+
+/*PRIVATE FUNCTIONS*/
 
 void HuffmanAlgorithm::make_tree(int histogram[ASCII]) {
     //ensures that 2 nodes exist
@@ -59,7 +62,7 @@ void HuffmanAlgorithm::generate_histogram() {
     int histogram[ASCII] = {0};
     uint8_t temp[BLOCK];
     int file_size = 0;
-    int bytes_read;
+    uint32_t bytes_read;
 
     // do {
     //     for (int i = 0; i < bytes_read; i++) {
@@ -75,7 +78,7 @@ void HuffmanAlgorithm::generate_histogram() {
     bytes_read = infile->gcount();
     file_size += bytes_read;
     while ( bytes_read > 0 ) {
-        for (int i = 0; i < bytes_read; i++) {
+        for (int i = 0; i < (int)bytes_read; i++) {
             int sym = temp[i];
             histogram[sym] += 1;
         }
@@ -121,6 +124,27 @@ void HuffmanAlgorithm::generate_codes(TreeNode* root, Code c) {
     return;
 }
 
+void HuffmanAlgorithm::write_tree(TreeNode* root, std::ostream* outfile) {
+    // dumps tree in pre-fix order
+    if (root != nullptr) {
+        if (root->left == nullptr && root->right == nullptr) {
+            outfile->write("L",1);
+            outfile->write((char*)&(root->symbol),1);
+            return;
+        }
+        if (root->left) {
+            write_tree(root->left,outfile);
+        }
+        if (root->right) {
+            write_tree(root->right,outfile);
+        }
+        outfile->write("I",1);
+        return;
+    }
+}
+
+/*CONSTRUCTORS / DECONSTRUCTORS*/
+
 HuffmanAlgorithm::HuffmanAlgorithm() {
     infile = nullptr;
     encoding = false;
@@ -132,6 +156,22 @@ HuffmanAlgorithm::HuffmanAlgorithm() {
     header.magic = MAGIC_NUMBER;
 }
 
+HuffmanAlgorithm::HuffmanAlgorithm(std::istream* ifa) {
+    infile = ifa;
+    encoding = true;
+    
+
+    outfile = nullptr;
+    decoding = false;
+
+    root = nullptr;
+    header.magic = MAGIC_NUMBER;
+
+    generate_histogram();
+
+    Code c;
+    generate_codes(root, c);
+}
 
 HuffmanAlgorithm::~HuffmanAlgorithm() {
     if (root != nullptr) {
@@ -139,50 +179,44 @@ HuffmanAlgorithm::~HuffmanAlgorithm() {
     }
 }
 
+/*ACCESS FUNCTIONS*/
+
 Code* HuffmanAlgorithm::get_table() {
     return table;
-}
-
-void HuffmanAlgorithm::write_tree(TreeNode* root, std::ostream& outfile) {
-    // dumps tree in pre-fix order
-    if (root != nullptr) {
-        if (root->left == nullptr && root->right == nullptr) {
-            outfile.write("L",1);
-            outfile.write((char*)&(root->symbol),1);
-            return;
-        }
-        if (root->left) {
-            write_tree(root->left,outfile);
-        }
-        if (root->right) {
-            write_tree(root->right,outfile);
-        }
-        outfile.write("I",1);
-        return;
-    }
 }
 
 void HuffmanAlgorithm::set_encode(std::istream* input) {
     // toggle algorithm for encoding purposes
     decoding = false;
     encoding = true;
+    if (input != infile) {
+        infile = input;
 
-    infile = input;
-    generate_histogram();
+        if (root) del_tree(root);
 
-    Code c;
-    generate_codes(root, c);
+        generate_histogram();
 
+        Code c;
+        generate_codes(root, c);
+    }
     return;
 }
 
-void HuffmanAlgorithm::write_header(std::ostream& outfile) {
+void HuffmanAlgorithm::write_header(std::ostream* outfile) {
+    // writes a header to a file if set to encode data
     if (encoding) {
-        outfile.write((char*)&header,sizeof(header));
+        outfile->write((char*)&header,sizeof(header));
         write_tree(root,outfile);
     }
     else {
         throw std::logic_error("Cannot write header, Object not set for encoding");
     }
     return;
+}
+
+void HuffmanAlgorithm::print_code() {
+    // prints each code in table to check if uninitialized
+    for (int i = 0; i < ASCII; i++) {
+        std::cerr << table[i].size() << std::endl;
+    }
 }
